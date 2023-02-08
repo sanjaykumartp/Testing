@@ -5,21 +5,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.department.entity.RoleMaster;
 import com.department.entity.UserMaster;
-import com.department.exception.BusinessException;
-import com.department.exception.NotFoundException;
+import com.department.exception.CustomException;
 import com.department.repository.RoleMasterRepository;
 import com.department.repository.UserRepository;
-
-
-
-
 
 @Service
 public class UserService implements UserServiceInterface {
@@ -42,11 +35,11 @@ public class UserService implements UserServiceInterface {
 
 		if (!(repositroy.findByEmail(datas.getEmail()) == null)) {
 
-			throw new BusinessException("Email ID ", "Entered Email Id already exsists in DataBase");
+			throw new CustomException("Entered Email Id already exsists in DataBase");
 		}
 		if (!(repositroy.findByUserName(datas.getUserName()) == null))
 		{
-			throw new BusinessException("User Name"," User Name is already present in database");
+			throw new CustomException(" User Name is already present in database");
 		}
 		datas=repositroy.save(userMaster);
 
@@ -80,11 +73,11 @@ public class UserService implements UserServiceInterface {
 	//		
 	//	
 	//	}
+
 	@Override
 	public void deleteUserbyid(Long id) {
 		if(!repositroy.existsById(id)) {
-			throw new BusinessException("User Id",
-					" User ID Not found in DataBase, Please enter valid ID");
+			throw new CustomException(" User ID Not found in DataBase, Please enter valid ID");
 		}
 		UserMaster s1= repositroy.findById(id).get();
 		repositroy.delete(s1);
@@ -94,7 +87,7 @@ public class UserService implements UserServiceInterface {
 	public List<UserMaster> getAllUserdata()  {
 		List<UserMaster> userList = repositroy.findAll();
 		if(CollectionUtils.isEmpty(userList)) {
-			throw new BusinessException("Database", "Database no records found");
+			throw new CustomException( "Database no records found");
 		}
 		else
 			return userList;
@@ -102,48 +95,35 @@ public class UserService implements UserServiceInterface {
 
 	@Override
 	public UserMaster updateUser(String userName, UserMaster userMaster) {
-		UserMaster datas=userMaster;
-		
-		UserMaster mail = repositroy.findByEmail(userMaster.getEmail());
 		Date date=new Date();
-//		String mail1 = userMaster.getEmail();
-//		String mail2 = mail.getEmail();
-//		int count = 0;
-//		if (mail1.equals(mail2)) {
-//			count++;
-//		}
-//		if (count>1) {
-//			throw new BusinessException("Duplicate mail id", "Email id already exsist");
-//		}
-		List< UserMaster> list = repositroy.findAllByEmail(userName);
-		if (list.size()>1) {
-			throw new BusinessException("Email id alreadt Exsist", "Duplicte email id");
-		}
-		
 		UserMaster modifySaved = repositroy.findByUserName(userName);
-		RoleMaster role=	rmRepo.findById(userMaster.getRoleMaster().get(0).getId()).get();
-
+		UserMaster email = repositroy.findByEmail(userMaster.getEmail());
+		List<UserMaster> listOfEmail = repositroy.findAllByEmail(modifySaved.getEmail());
+		if (modifySaved.getEmail().equals(userMaster.getEmail())) {
+			modifySaved.setEmail(userMaster.getEmail());
+		}else if (email!= null) {
+			throw new CustomException("Email id already Exsist in Database");
+		}
 		modifySaved.setEmail(userMaster.getEmail());
-		userMaster.setCreatedDate(modifySaved.getCreatedDate());
 		modifySaved.setFullName(userMaster.getFullName());
 		modifySaved.setStatus(userMaster.getStatus());
 		modifySaved.setUpdatedDate(date.toString());
 		modifySaved.setRoleMaster(userMaster.getRoleMaster());
-
-		return repositroy.save(modifySaved);
-
+		modifySaved = repositroy.save(modifySaved);
+		
+		return modifySaved;
 	}
 
 	@Override
 	public List<UserMaster> getAllUserdataStatus(String status) {
 
-	List<UserMaster>	userMasterList=repositroy.findAll();
-	List<UserMaster> ls=userMasterList.stream().filter(column->column.getStatus().equalsIgnoreCase(status)).collect(Collectors.toList());
-	if(CollectionUtils.isEmpty(ls)) {
-		throw new NotFoundException("Email ID ");
-	}
-	else
-		return ls;
+		List<UserMaster>	userMasterList=repositroy.findAll();
+		List<UserMaster> ls=userMasterList.stream().filter(column->column.getStatus().equalsIgnoreCase(status)).collect(Collectors.toList());
+		if(CollectionUtils.isEmpty(ls)) {
+			throw new CustomException("Email ID Not found");
+		}
+		else
+			return ls;
 	}
 
 

@@ -7,11 +7,11 @@
 		<version>2.7.5</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.ebs</groupId>
-	<artifactId>E-Business_Suit</artifactId>
+	<groupId>com.department</groupId>
+	<artifactId>TEST</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>E-Business_Suit</name>
-	<description>E-Business_Suit for archiving data from production database to arcive database </description>
+	<name>test</name>
+	<description> </description>
 	<properties>
 		<java.version>11</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,19 +19,6 @@
 		<java.version>1.8</java.version>
 	</properties>
 	<dependencies>
-
-		<dependency>
-			<groupId>com.oracle.database.jdbc</groupId>
-			<artifactId>ojdbc8-production</artifactId>
-			<version>21.1.0.0</version>
-			<type>pom</type>
-		</dependency>
-
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>8.0.21</version>
-		</dependency>
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -66,14 +53,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 -->
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>3.0.0</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator -->
 
 		<!-- https://mvnrepository.com/artifact/org.json/json -->
 		<dependency>
@@ -124,9 +103,12 @@
 			<version>2.4.0</version>
 		</dependency>
 
-		
-
-		
+<!-- https://mvnrepository.com/artifact/com.dagm/dev-tool -->
+<dependency>
+    <groupId>com.dagm</groupId>
+    <artifactId>dev-tool</artifactId>
+    <version>0.0.8-RELEASE</version>
+</dependency>
 
 	</dependencies>
 
